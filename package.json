@@ -1,5 +1,5 @@
 {
-      "CloudStrm": {
+      "alistapitostrm": {
         "name": "ALIST Strm生成",
         "description": "通过alist api 批量生成strm文件。",
         "version": "1",
