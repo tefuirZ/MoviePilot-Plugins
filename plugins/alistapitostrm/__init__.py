@@ -21,7 +21,7 @@ class CloudStrm(_PluginBase):
     # 插件描述
     plugin_desc = "通过alist api 批量生成strm文件"
     # 插件图标
-    plugin_icon = "create.png"
+    plugin_icon = "https://raw.githubusercontent.com/syscc/MoviePilot-Plugins/main/icons/create.png"
     # 插件版本
     plugin_version = "1.0"
     # 插件作者
