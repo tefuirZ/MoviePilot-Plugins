@@ -1,1 +1,4 @@
-important~=0.0.3
+requests~=2.26.0
+app.plugins._PluginBase
+app.log.logger
+app.utils.string.StringUtils
