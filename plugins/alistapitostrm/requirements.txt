@@ -2,3 +2,6 @@ requests~=2.26.0
 app.plugins._PluginBase
 app.log.logger
 app.utils.string.StringUtils
+roman
+pypushdeer
+TmdbHelper
