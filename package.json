@@ -1,6 +1,6 @@
 {
       "CloudStrm": {
-        "name": "阿里云盘Strm生成",
+        "name": "ALIST Strm生成",
         "description": "通过alist api 批量生成strm文件。",
         "version": "1",
         "icon": "https://raw.githubusercontent.com/syscc/MoviePilot-Plugins/main/icons/create.png",
