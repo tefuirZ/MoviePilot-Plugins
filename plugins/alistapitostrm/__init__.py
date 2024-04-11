@@ -15,8 +15,7 @@ from app.plugins import _PluginBase
 from app.core.config import settings
 
 
-
-class FileSystemTraversalPlugin(_PluginBase):
+class CloudStrm(_PluginBase):
     # 插件名称
     plugin_name = "alist-api to strm"
     # 插件描述
