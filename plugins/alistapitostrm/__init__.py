@@ -54,7 +54,7 @@ class alistapitostrm(_PluginBase):
             self.traverse_directory(self._root_path, json_structure, base_url, self._target_directory)
             os.makedirs(self._target_directory, exist_ok=True)
             self.create_strm_files(json_structure, self._target_directory, base_url)
-            print('所有strm文件创建完成')
+            logger.info('所有strm文件创建完成')
             self._enabled = False
 
 
@@ -66,7 +66,12 @@ class alistapitostrm(_PluginBase):
         更新配置
         """
         self.update_config({
-            "enabled": self._enabled
+            "root_path": self._root_path,
+            "site_url": self._site_url,
+            "target_directory": self._target_directory,
+            "ignored_directories": ','.join(self._ignored_directories) if isinstance(self._ignored_directories,
+                                                                                     list) else '',
+            "token": self._token
         })
 
 
