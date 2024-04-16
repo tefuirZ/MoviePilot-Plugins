@@ -18,11 +18,11 @@ class AlistApiToStrmFile(_PluginBase):
     # 插件属性
     plugin_name = "alist生成strm文件"
     plugin_desc = "通过alist-api在指定目录下创建strm文件"
-    plugin_icon = "https://alist.nn.ci/logo.svg"
+    plugin_icon = "https://img.679865.xyz/1/65ae8e98e6095.ico"
     plugin_color = "#3B5E8E"
     plugin_version = "1.0.0"
     plugin_author = "tefuir"
-    author_url = "https://github.com/tefuirzt"
+    author_url = "https://github.com/tefuirZ"
     plugin_config_prefix = "alistapito_strmfile_"
     plugin_order = 30
     auth_level = 1
