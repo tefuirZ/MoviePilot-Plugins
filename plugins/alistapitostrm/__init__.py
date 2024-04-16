@@ -28,7 +28,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 
-class AlistApiToStrmFile(_PluginBase):
+class alistapitostrm(_PluginBase):
     # 插件属性
     plugin_name = "alist生成strm文件"
     plugin_desc = "通过alist-api在指定目录下创建strm文件"
