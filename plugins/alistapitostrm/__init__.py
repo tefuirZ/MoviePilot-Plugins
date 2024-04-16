@@ -22,8 +22,8 @@ class alistapitostrm(_PluginBase):
     plugin_version = "1.0"
     plugin_author = "tefuir"
     author_url = "https://github.com/tefuirZ"
-    plugin_config_prefix = "alistapitostrmfile_"
-    plugin_order = 1
+    plugin_config_prefix = "alistapito_strmfile_"
+    plugin_order = 30
     auth_level = 1
 
     _enabled = False
@@ -47,18 +47,19 @@ class alistapitostrm(_PluginBase):
             logger.info("Strm File Creator 插件初始化完成")
             thread = threading.Thread(target=self.create_strm_files)
             thread.start()
+            print('脚本运行中。。。。。。。')
+            json_structure = {}
+            base_url = self._site_url + '/d' + self._root_path + '/'
+            self.traverse_directory(self._root_path, json_structure, base_url, self._target_directory)
+            os.makedirs(self._target_directory, exist_ok=True)
+            self.create_strm_files(json_structure, self._target_directory, base_url)
+            print('所有strm文件创建完成')
 
 
 
 
-    def create_strm_files(self):
-        print('脚本运行中。。。。。。。')
-        json_structure = {}
-        base_url = self._site_url + '/d' + self._root_path + '/'
-        self.traverse_directory(self._root_path, json_structure, base_url, self._target_directory)
-        os.makedirs(self._target_directory, exist_ok=True)
-        self.create_strm_files(json_structure, self._target_directory, base_url)
-        print('所有strm文件创建完成')
+
+
 
 
 
@@ -269,11 +270,11 @@ class alistapitostrm(_PluginBase):
                                            }
                                        ]
                                    }
-                                   
-                                   
+
+
                                ]
                            },
-                           
+
 
                        ]
                    }
