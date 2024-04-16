@@ -1,5 +1,5 @@
 {
-      "AlistApiToStrmFile": {
+      "alistapitostrm": {
         "name": "alist生成strm文件",
         "description": "通过alist-api在指定目录下创建strm文件",
         "version": "1.0.0",
