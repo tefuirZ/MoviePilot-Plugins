@@ -73,58 +73,145 @@ class alistapitostrm(_PluginBase):
     def get_api(self) -> List[Dict[str, Any]]:
         pass
 
-    def get_form(self):
-        return [
-            {
-                'component': 'VSwitch',
-                'props': {
-                    'model': 'enabled',
-                    'label': '启用插件',
+def get_form(self) -> Tuple[List[dict], Dict[str, Any]]:
+    """
+    拼装插件配置页面，需要返回两块数据：1、页面配置；2、数据结构
+    """
+    return [
+        {
+            'component': 'VForm',
+            'content': [
+                {
+                    'component': 'VRow',
+                    'content': [
+                        {
+                            'component': 'VCol',
+                            'props': {
+                                'cols': 12,
+                                'md': 4
+                            },
+                            'content': [
+                                {
+                                    'component': 'VSwitch',
+                                    'props': {
+                                        'model': 'enabled',
+                                        'label': '启用插件',
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    'component': 'VRow',
+                    'content': [
+                        {
+                            'component': 'VCol',
+                            'props': {
+                                'cols': 12,
+                            },
+                            'content': [
+                                {
+                                    'component': 'VTextField',
+                                    'props': {
+                                        'model': 'root_path',
+                                        'label': 'alist根路径',
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    'component': 'VRow',
+                    'content': [
+                        {
+                            'component': 'VCol',
+                            'props': {
+                                'cols': 12,
+                            },
+                            'content': [
+                                {
+                                    'component': 'VTextField',
+                                    'props': {
+                                        'model': 'site_url',
+                                        'label': 'alist地址',
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    'component': 'VRow',
+                    'content': [
+                        {
+                            'component': 'VCol',
+                            'props': {
+                                'cols': 12,
+                            },
+                            'content': [
+                                {
+                                    'component': 'VTextField',
+                                    'props': {
+                                        'model': 'target_directory',
+                                        'label': '目标目录',
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    'component': 'VRow',
+                    'content': [
+                        {
+                            'component': 'VCol',
+                            'props': {
+                                'cols': 12,
+                            },
+                            'content': [
+                                {
+                                    'component': 'VTextField',
+                                    'props': {
+                                        'model': 'ignored_directories',
+                                        'label': '忽略目录',
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    'component': 'VRow',
+                    'content': [
+                        {
+                            'component': 'VCol',
+                            'props': {
+                                'cols': 12,
+                            },
+                            'content': [
+                                {
+                                    'component': 'VTextField',
+                                    'props': {
+                                        'model': 'token',
+                                        'label': 'alist的令牌',
+                                    }
+                                }
+                            ]
+                        }
+                    ]
                 }
-            },
-            {
-                'component': 'VTextField',
-                'props': {
-                    'model': 'root_path',
-                    'label': 'alist根路径',
-                }
-            },
-            {
-                'component': 'VTextField',
-                'props': {
-                    'model': 'site_url',
-                    'label': 'alist地址',
-                }
-            },
-            {
-                'component': 'VTextField',
-                'props': {
-                    'model': 'target_directory',
-                    'label': '目标目录',
-                }
-            },
-            {
-                'component': 'VTextField',
-                'props': {
-                    'model': 'ignored_directories',
-                    'label': '忽略目录',
-                }
-            },
-            {
-                'component': 'VTextField',
-                'props': {
-                    'model': 'token',
-                    'label': 'alist的令牌',
-                }
-            }
-        ], {
-            "enabled": self._enabled,
-            "root_path": self._root_path,
-            "site_url": self._site_url,
-            "target_directory": self._target_directory,
-            "ignored_directories": ','.join(self._ignored_directories),
-            "token": self._token
+            ]
         }
+    ], {
+        "enabled": self._enabled,
+        "root_path": self._root_path,
+        "site_url": self._site_url,
+        "target_directory": self._target_directory,
+        "ignored_directories": ','.join(self._ignored_directories),
+        "token": self._token
+    }
     def get_page(self):
         pass
 
