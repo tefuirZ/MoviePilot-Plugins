@@ -45,15 +45,20 @@ class alistapitostrm(_PluginBase):
 
         if self._enabled:
             logger.info("Strm File Creator 插件初始化完成")
-            thread = threading.Thread(target=self.create_strm_files)
-            thread.start()
-            logger.info('脚本运行中。。。。。。。')
             json_structure = {}
             base_url = self._site_url + '/d' + self._root_path + '/'
             self.traverse_directory(self._root_path, json_structure, base_url, self._target_directory)
             os.makedirs(self._target_directory, exist_ok=True)
-            self.create_strm_files(json_structure, self._target_directory, base_url)
-            logger.info('所有strm文件创建完成')
+
+            # 传递必要的参数到子线程中
+            thread = threading.Thread(target=self.create_strm_files,
+                                      args=(json_structure, self._target_directory, base_url))
+            thread.start()
+
+            logger.info('脚本运行中。。。。。。。')
+            print('所有strm文件创建完成')
+
+            # 将_enabled设置为False，使插件只运行一次
             self._enabled = False
 
 
