@@ -1,13 +1,13 @@
 {
-      "alistapitostrm": {
-        "name": "ALIST Strm生成",
-        "description": "通过alist api 批量生成strm文件。",
-        "version": "1",
-        "icon": "https://raw.githubusercontent.com/syscc/MoviePilot-Plugins/main/icons/create.png",
-        "author": "syscc",
-        "level": 1.0,
+      "CloudStrm": {
+        "name": "alist生成strm文件",
+        "description": "通过alist-api在指定目录下创建strm文件",
+        "version": "1.0.0",
+        "icon": "https://alist.nn.ci/logo.svg",
+        "author": "tefuir",
+        "level": 1,
         "history": {
-          "v1.0": "自定义执行周期执行命令并推送结果"
+          "v1.0.0": "api模式支持启用https"
         }
-    }
+      }
 }
