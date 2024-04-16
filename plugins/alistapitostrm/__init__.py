@@ -283,8 +283,7 @@ class alistapitostrm(_PluginBase):
             "root_path": self._root_path,
             "site_url": self._site_url,
             "target_directory": self._target_directory,
-            "ignored_directories": ','.join(self._ignored_directories) if isinstance(self._ignored_directories,
-                                                                                     list) else '',
+            "ignored_directories": ','.join(self._ignored_directories) if isinstance(self._ignored_directories, list) else '',
             "token": self._token
         }
 
