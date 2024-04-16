@@ -47,7 +47,7 @@ class alistapitostrm(_PluginBase):
             logger.info("Strm File Creator 插件初始化完成")
             thread = threading.Thread(target=self.create_strm_files)
             thread.start()
-            print('脚本运行中。。。。。。。')
+            logger.info('脚本运行中。。。。。。。')
             json_structure = {}
             base_url = self._site_url + '/d' + self._root_path + '/'
             self.traverse_directory(self._root_path, json_structure, base_url, self._target_directory)
@@ -132,7 +132,7 @@ class alistapitostrm(_PluginBase):
                     strm_path = os.path.join(full_path, strm_filename)
 
                     if os.path.exists(strm_path):
-                        print(f"{strm_path} 已存在，跳过创建。")
+                        logger.info(f"{strm_path} 已存在，跳过创建。")
                         continue
 
                     os.makedirs(full_path, exist_ok=True)
@@ -141,7 +141,7 @@ class alistapitostrm(_PluginBase):
                     item['created'] = True
                     with open(strm_path, 'w', encoding='utf-8') as strm_file:
                         strm_file.write(video_url)
-                        print(f"{strm_path} 已创建。")
+                        logger.info(f"{strm_path} 已创建。")
             elif isinstance(item, dict):
                 new_directory = os.path.join(full_path, name)
                 os.makedirs(new_directory, exist_ok=True)
@@ -283,7 +283,8 @@ class alistapitostrm(_PluginBase):
             "root_path": self._root_path,
             "site_url": self._site_url,
             "target_directory": self._target_directory,
-            "ignored_directories": ','.join(self._ignored_directories) if isinstance(self._ignored_directories, list) else '',
+            "ignored_directories": ','.join(self._ignored_directories) if isinstance(self._ignored_directories,
+                                                                                     list) else '',
             "token": self._token
         }
 
