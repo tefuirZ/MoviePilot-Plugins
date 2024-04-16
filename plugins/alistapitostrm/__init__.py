@@ -37,8 +37,8 @@ class AlistApiToStrmFile(_PluginBase):
     plugin_version = "1.0.0"
     plugin_author = "tefuir"
     author_url = "https://github.com/tefuirZ"
-    plugin_config_prefix = "alistapito_strmfile_"
-    plugin_order = 30
+    plugin_config_prefix = "alistapitostrmfile_"
+    plugin_order = 1
     auth_level = 1
 
     _enabled = False
@@ -67,10 +67,10 @@ class AlistApiToStrmFile(_PluginBase):
         return self._enabled
 
     @staticmethod
-    def get_command():
+    def get_command() -> List[Dict[str, Any]]:
         pass
 
-    def get_api(self):
+    def get_api(self) -> List[Dict[str, Any]]:
         pass
 
     def get_form(self):
