@@ -54,7 +54,7 @@ class alistapitostrm(_PluginBase):
             os.makedirs(self._target_directory, exist_ok=True)
             self.create_strm_files(json_structure, self._target_directory, base_url)
             print('所有strm文件创建完成')
-
+            self._enabled = False
 
 
 
@@ -176,7 +176,7 @@ class alistapitostrm(_PluginBase):
                                                'component': 'VSwitch',
                                                'props': {
                                                    'model': 'enabled',
-                                                   'label': '启用插件',
+                                                   'label': '立即运行一次',
                                                }
                                            }
                                        ]
