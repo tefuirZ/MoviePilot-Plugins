@@ -21,7 +21,7 @@ class alistapitostrm(_PluginBase):
     plugin_color = "#3B5E8E"
     plugin_version = "1.0"
     plugin_author = "tefuir"
-    author_url = "https://github.com/tefuirzt"
+    author_url = "https://github.com/tefuirz"
     plugin_config_prefix = "alistapito_strmfile_"
     plugin_order = 30
     auth_level = 1
