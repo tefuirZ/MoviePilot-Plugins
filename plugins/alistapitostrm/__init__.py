@@ -14,7 +14,7 @@ from time import sleep
 
 
 
-class alistapitostrm(_PluginBase):
+class AlistApiToStrmFile(_PluginBase):
     # 插件属性
     plugin_name = "alist生成strm文件"
     plugin_desc = "通过alist-api在指定目录下创建strm文件"
