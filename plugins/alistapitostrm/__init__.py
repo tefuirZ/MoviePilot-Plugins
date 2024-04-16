@@ -48,7 +48,6 @@ class alistapitostrm(_PluginBase):
             thread = threading.Thread(target=self.create_strm_files)
             thread.start()
             logger.info('脚本运行中。。。。。。。')
-            self.__update_config()
             json_structure = {}
             base_url = self._site_url + '/d' + self._root_path + '/'
             self.traverse_directory(self._root_path, json_structure, base_url, self._target_directory)
