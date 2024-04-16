@@ -23,7 +23,7 @@ class alistapitostrm(_PluginBase):
     plugin_author = "tefuir"
     author_url = "https://github.com/tefuirZ"
     plugin_config_prefix = "alistapitostrmfile_"
-    plugin_order = 30
+    plugin_order = 1
     auth_level = 1
 
     _enabled = False
