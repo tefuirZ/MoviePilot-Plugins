@@ -47,7 +47,7 @@ class alistapitostrm(_PluginBase):
 
         if self._enabled:
             logger.info("Strm File Creator 插件初始化完成")
-            thread = threading.Thread(target=self.create_strm_files)
+            thread = threading.Thread(target=self.create_strm_files, args=(json_structure, self._target_directory, base_url))
             thread.start()
             logger.info('脚本运行中。。。。。。。')
             json_structure = {}
