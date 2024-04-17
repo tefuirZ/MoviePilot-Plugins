@@ -13,17 +13,18 @@ import threading
 from time import sleep
 from typing import List, Dict, Any, Tuple
 
+
 class alistapitostrm(_PluginBase):
     # 插件属性
     plugin_name = "alist生成strm文件"
     plugin_desc = "通过alist-api在指定目录下创建strm文件"
     plugin_icon = "https://img.679865.xyz/1/65ae8e98e6095.ico"
     plugin_color = "#3B5E8E"
-    plugin_version = "1.0"
+    plugin_version = "1.1"
     plugin_author = "tefuir"
     author_url = "https://github.com/tefuirZ"
-    plugin_config_prefix = "alistapito_strmfile_"
-    plugin_order = 30
+    plugin_config_prefix = "alistapitostrmfile_"
+    plugin_order = 3
     auth_level = 1
 
     _enabled = False
@@ -58,17 +59,15 @@ class alistapitostrm(_PluginBase):
         # 启动线程来生成strm文件
         thread = threading.Thread(target=self.create_strm_files,
                                   args=(json_structure, self._target_directory, base_url))
-        
+
         thread.start()
 
-
-
     def requests_retry_session(
-        self,
-        retries=3,
-        backoff_factor=0.3,
-        status_forcelist=(500, 502, 504),
-        session=None,
+            self,
+            retries=3,
+            backoff_factor=0.3,
+            status_forcelist=(500, 502, 504),
+            session=None,
     ):
         session = session or requests.Session()
         retry = Retry(
@@ -123,6 +122,18 @@ class alistapitostrm(_PluginBase):
         video_extensions = ['.mp4', '.mkv', '.avi', '.mov', '.flv', '.wmv']
         return any(filename.lower().endswith(ext) for ext in video_extensions)
 
+    def check_strm_creation_status(self, json_structure, target_directory):
+        total_files = len(
+            [name for name, item in json_structure.items() if isinstance(item, dict) and item.get('type') == 'file'])
+        created_files = len([name for name, item in json_structure.items() if
+                             isinstance(item, dict) and item.get('type') == 'file' and item.get('created')])
+
+        if total_files == created_files:
+            self._enabled = False
+            logger.info("所有.strm文件创建完成，插件已停用。")
+        else:
+            logger.info(f"已创建 {created_files}/{total_files} .strm 文件。")
+
     def create_strm_files(self, json_structure, target_directory, base_url, current_path=''):
         for name, item in json_structure.items():
             full_path = os.path.join(target_directory, current_path)
@@ -142,10 +153,9 @@ class alistapitostrm(_PluginBase):
                     with open(strm_path, 'w', encoding='utf-8') as strm_file:
                         strm_file.write(video_url)
                         logger.info(f"{strm_path} 已创建。")
-            elif isinstance(item, dict):
-                new_directory = os.path.join(full_path, name)
-                os.makedirs(new_directory, exist_ok=True)
-                self.create_strm_files(item, target_directory, base_url, os.path.join(current_path, name))
+
+        # 检查创建状态并更新插件状态
+        self.check_strm_creation_status(json_structure, target_directory)
 
     @staticmethod
     def get_command() -> List[Dict[str, Any]]:
@@ -271,22 +281,20 @@ class alistapitostrm(_PluginBase):
                                        ]
                                    }
 
-
                                ]
                            },
 
-
                        ]
                    }
-               ],  {
-            "enabled": self._enabled,
-            "root_path": self._root_path,
-            "site_url": self._site_url,
-            "target_directory": self._target_directory,
-            "ignored_directories": ','.join(self._ignored_directories) if isinstance(self._ignored_directories,
-                                                                                     list) else '',
-            "token": self._token
-        }
+               ], {
+                   "enabled": self._enabled,
+                   "root_path": self._root_path,
+                   "site_url": self._site_url,
+                   "target_directory": self._target_directory,
+                   "ignored_directories": ','.join(self._ignored_directories) if isinstance(self._ignored_directories,
+                                                                                            list) else '',
+                   "token": self._token
+               }
 
     def get_page(self) -> List[dict]:
         pass
