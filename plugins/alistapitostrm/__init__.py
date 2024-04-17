@@ -63,8 +63,6 @@ class alistapitostrm(_PluginBase):
         thread.start()
         thread.join()
 
-        # 检查创建状态并更新插件状态
-        self.check_strm_creation_status(json_structure, self._target_directory)
         self._enabled = False
         logger.info('所有strm文件已创建完成，脚本自动停用')
     def requests_retry_session(
