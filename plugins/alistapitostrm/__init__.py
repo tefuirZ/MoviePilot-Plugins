@@ -33,28 +33,27 @@ class alistapitostrm(_PluginBase):
     _ignored_directories = None
     _token = None
 
-    def init_plugin(self, config: dict = None):
-        if config:
-            self._enabled = config.get("enabled", False)
-            self._root_path = config.get("root_path", self._root_path)
-            self._site_url = config.get("site_url", self._site_url)
-            self._target_directory = config.get("target_directory", self._target_directory)
-            ignored_directories_str = config.get("ignored_directories", "")
-            self._ignored_directories = [d.strip() for d in ignored_directories_str.split(',') if d.strip()]
-            self._token = config.get("token", "")
+def init_plugin(self, config: dict = None):
+    if config:
+        self._enabled = config.get("enabled", False)
+        self._root_path = config.get("root_path", self._root_path)
+        self._site_url = config.get("site_url", self._site_url)
+        self._target_directory = config.get("target_directory", self._target_directory)
+        ignored_directories_str = config.get("ignored_directories", "")
+        self._ignored_directories = [d.strip() for d in ignored_directories_str.split(',') if d.strip()]
+        self._token = config.get("token", "")
 
-        if self._enabled:
-            logger.info("Strm File Creator 插件初始化完成")
-            thread = threading.Thread(target=self.create_strm_files)
-            thread.start()
-            logger.info('脚本运行中。。。。。。。')
-            json_structure = {}
-            base_url = self._site_url + '/d' + self._root_path + '/'
-            self.traverse_directory(self._root_path, json_structure, base_url, self._target_directory)
-            os.makedirs(self._target_directory, exist_ok=True)
-            self.create_strm_files(json_structure, self._target_directory, base_url)
-            print('所有strm文件创建完成')
-            self._enabled = False
+    if self._enabled:
+        logger.info("Strm File Creator 插件初始化完成")
+        thread = threading.Thread(target=self.create_strm_files,
+                                  args=(self.traverse_directory(self._root_path, {}, self._site_url, self._target_directory),
+                                        self._target_directory,
+                                        self._site_url + '/d' + self._root_path + '/'))
+        thread.start()
+        logger.info('脚本运行中。。。。。。。')
+        os.makedirs(self._target_directory, exist_ok=True)
+        logger.info('所有strm文件创建完成')
+        self._enabled = False
 
 
 
