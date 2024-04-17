@@ -20,11 +20,11 @@ class alistapitostrm(_PluginBase):
     plugin_desc = "通过alist-api在指定目录下创建strm文件"
     plugin_icon = "https://img.679865.xyz/1/65ae8e98e6095.ico"
     plugin_color = "#3B5E8E"
-    plugin_version = "2.0"
+    plugin_version = "2.1"
     plugin_author = "tefuir"
     author_url = "https://github.com/tefuirZ"
-    plugin_config_prefix = "alistapitostrmfile_"
-    plugin_order = 3
+    plugin_config_prefix = "alistapito_strmfile_"
+    plugin_order = 30
     auth_level = 1
 
     _enabled = False
@@ -61,6 +61,14 @@ class alistapitostrm(_PluginBase):
                                   args=(json_structure, self._target_directory, base_url))
 
         thread.start()
+
+        # 等待线程完成
+        thread.join()
+
+        # 检查创建状态并更新插件状态
+        self.check_strm_creation_status(json_structure, self._target_directory)
+
+
 
     def requests_retry_session(
             self,
