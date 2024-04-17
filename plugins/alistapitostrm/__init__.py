@@ -62,9 +62,6 @@ class alistapitostrm(_PluginBase):
 
         thread.start()
         thread.join()
-
-        self._enabled = False
-        logger.info('所有strm文件已创建完成，脚本自动停用')
     def requests_retry_session(
             self,
             retries=3,
