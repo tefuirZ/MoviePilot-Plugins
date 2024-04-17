@@ -33,6 +33,8 @@ class alistapitostrm(_PluginBase):
     _ignored_directories = None
     _token = None
 
+
+
 def init_plugin(self, config: dict = None):
     if config:
         self._enabled = config.get("enabled", False)
@@ -45,13 +47,6 @@ def init_plugin(self, config: dict = None):
 
     if self._enabled:
         logger.info("Strm File Creator 插件初始化完成")
-        
-        # 获取插件配置和用户交互界面
-        form, default_config = self.get_form()
-        
-        # 在此处可以处理form和default_config，例如展示给用户进行配置
-        # ...
-        
         thread = threading.Thread(target=self.create_strm_files,
                                   args=(self.traverse_directory(self._root_path, {}, self._site_url, self._target_directory),
                                         self._target_directory,
@@ -61,6 +56,7 @@ def init_plugin(self, config: dict = None):
         os.makedirs(self._target_directory, exist_ok=True)
         logger.info('所有strm文件创建完成')
         self._enabled = False
+
 
 
 
