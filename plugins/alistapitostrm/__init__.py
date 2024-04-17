@@ -22,7 +22,7 @@ class alistapitostrm(_PluginBase):
     plugin_version = "1.0"
     plugin_author = "tefuir"
     author_url = "https://github.com/tefuirZ"
-    plugin_config_prefix = "alistapitostrmfile_"
+    plugin_config_prefix = "alistapito_strmfile_"
     plugin_order = 3
     auth_level = 1
 
@@ -33,35 +33,45 @@ class alistapitostrm(_PluginBase):
     _ignored_directories = None
     _token = None
 
+    def init_plugin(self, config: dict = None):
+        if config:
+            self._enabled = config.get("enabled", False)
+            self._root_path = config.get("root_path", self._root_path)
+            self._site_url = config.get("site_url", self._site_url)
+            self._target_directory = config.get("target_directory", self._target_directory)
+            ignored_directories_str = config.get("ignored_directories", "")
+            self._ignored_directories = [d.strip() for d in ignored_directories_str.split(',') if d.strip()]
+            self._token = config.get("token", "")
 
+        if self._enabled:
+            logger.info("Strm File Creator 插件初始化完成")
+            # 确保配置完全后，启动文件生成过程
+            self.start_file_creation()
 
-def init_plugin(self, config: dict = None):
-    if config:
-        self._enabled = config.get("enabled", False)
-        self._root_path = config.get("root_path", self._root_path)
-        self._site_url = config.get("site_url", self._site_url)
-        self._target_directory = config.get("target_directory", self._target_directory)
-        ignored_directories_str = config.get("ignored_directories", "")
-        self._ignored_directories = [d.strip() for d in ignored_directories_str.split(',') if d.strip()]
-        self._token = config.get("token", "")
+    def start_file_creation(self):
+        json_structure = {}
+        base_url = self._site_url + '/d' + self._root_path + '/'
+        self.traverse_directory(self._root_path, json_structure, base_url, self._target_directory)
+        os.makedirs(self._target_directory, exist_ok=True)
 
-    if self._enabled:
-        logger.info("Strm File Creator 插件初始化完成")
-        # 确保配置完全后，启动文件生成过程
-        self.start_file_creation()
+        # 启动线程来生成strm文件
+        thread = threading.Thread(target=self.create_strm_files,
+                                  args=(json_structure, self._target_directory, base_url))
+        thread.start()
+        logger.info('脚本运行中。。。。。。。')
 
-def start_file_creation(self):
-    json_structure = {}
-    base_url = self._site_url + '/d' + self._root_path + '/'
-    self.traverse_directory(self._root_path, json_structure, base_url, self._target_directory)
-    os.makedirs(self._target_directory, exist_ok=True)
-    
-    # 启动线程来生成strm文件
-    thread = threading.Thread(target=self.create_strm_files, args=(json_structure, self._target_directory, base_url))
-    thread.start()
-    logger.info('脚本运行中。。。。。。。')
-
-
+    def __update_config(self):
+        """
+        更新配置
+        """
+        self.update_config({
+            "root_path": self._root_path,
+            "site_url": self._site_url,
+            "target_directory": self._target_directory,
+            "ignored_directories": ','.join(self._ignored_directories) if isinstance(self._ignored_directories,
+                                                                                     list) else '',
+            "token": self._token
+        })
 
 
 
