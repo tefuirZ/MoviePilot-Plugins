@@ -62,6 +62,8 @@ class alistapitostrm(_PluginBase):
 
         thread.start()
         thread.join()
+        logger.info(f" 源目录下的所有视频文件的strm文件已经创建完成，脚本自动停用"}
+        self._enabled = Flase
     def requests_retry_session(
             self,
             retries=3,
