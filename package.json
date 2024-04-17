@@ -2,7 +2,7 @@
       "alistapitostrm": {
         "name": "alist生成strm文件",
         "description": "通过alist-api在指定目录下创建strm文件",
-        "version": "2.2",
+        "version": "2.3",
         "icon": "https://img.679865.xyz/1/65ae8e98e6095.ico",
         "author": "tefuir",
         "level": 1,
