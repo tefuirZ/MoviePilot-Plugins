@@ -23,7 +23,7 @@ class alistapitostrm(_PluginBase):
     plugin_author = "tefuir"
     author_url = "https://github.com/tefuirZ"
     plugin_config_prefix = "alistapito_strmfile_"
-    plugin_order = 3
+    plugin_order = 30
     auth_level = 1
 
     _enabled = False
@@ -45,35 +45,16 @@ class alistapitostrm(_PluginBase):
 
         if self._enabled:
             logger.info("Strm File Creator 插件初始化完成")
-            # 确保配置完全后，启动文件生成过程
-            self.start_file_creation()
-
-    def start_file_creation(self):
-        json_structure = {}
-        base_url = self._site_url + '/d' + self._root_path + '/'
-        self.traverse_directory(self._root_path, json_structure, base_url, self._target_directory)
-        os.makedirs(self._target_directory, exist_ok=True)
-
-        # 启动线程来生成strm文件
-        thread = threading.Thread(target=self.create_strm_files,
-                                  args=(json_structure, self._target_directory, base_url))
-        thread.start()
-        logger.info('脚本运行中。。。。。。。')
-
-    def __update_config(self):
-        """
-        更新配置
-        """
-        self.update_config({
-            "root_path": self._root_path,
-            "site_url": self._site_url,
-            "target_directory": self._target_directory,
-            "ignored_directories": ','.join(self._ignored_directories) if isinstance(self._ignored_directories,
-                                                                                     list) else '',
-            "token": self._token
-        })
-
-
+            thread = threading.Thread(target=self.create_strm_files,
+                                      args=(self.traverse_directory(self._root_path, {}, self._site_url,
+                                                                    self._target_directory),
+                                            self._target_directory,
+                                            self._site_url + '/d' + self._root_path + '/'))
+            thread.start()
+            logger.info('脚本运行中。。。。。。。')
+            os.makedirs(self._target_directory, exist_ok=True)
+            logger.info('所有strm文件创建完成')
+            self._enabled = False
 
     def requests_retry_session(
         self,
