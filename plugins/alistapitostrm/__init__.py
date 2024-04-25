@@ -20,7 +20,7 @@ class alistapitostrm(_PluginBase):
     plugin_desc = "通过alist-api在指定目录下创建strm文件"
     plugin_icon = "https://img.679865.xyz/1/65ae8e98e6095.ico"
     plugin_color = "#3B5E8E"
-    plugin_version = "2.6"
+    plugin_version = "2.5"
     plugin_author = "tefuir"
     author_url = "https://github.com/tefuirZ"
     plugin_config_prefix = "alistapitostrmfile_"
@@ -243,117 +243,7 @@ class alistapitostrm(_PluginBase):
                                        'component': 'VCol',
                                        'props': {
                                            'cols': 12,
-                                       },
-                                       'content': [
-                                           {
-                                               'component': 'VTextField',
-                                               'props': {
-                                                   'model': 'root_path',
-                                                   'label': 'alist根路径',
-                                                   'placeholder': '请输入alist根路径',
-                                               }
-                                           }
-                                       ]
-                                   },
-                                   {
-                                       'component': 'VCol',
-                                       'props': {
-                                           'cols': 12,
-                                       },
-                                       'content': [
-                                           {
-                                               'component': 'VTextField',
-                                               'props': {
-                                                   'model': 'site_url',
-                                                   'label': 'alist地址',
-                                                   'placeholder': 'http://alist.b.com',
-                                               }
-                                           }
-                                       ]
-                                   },
-                                   {
-                                       'component': 'VCol',
-                                       'props': {
-                                           'cols': 12,
-                                       },
-                                       'content': [
-                                           {
-                                               'component': 'VTextField',
-                                               'props': {
-                                                   'model': 'token',
-                                                   'label': 'alist的token',
-                                                   'placeholder': 'alist-******',
-                                               }
-                                           }
-                                       ]
-                                   }
-                               ]
-                           },
-                           {
-                               'component': 'VRow',
-                               'content': [
-                                   {
-                                       'component': 'VCol',
-                                       'props': {
-                                           'cols': 12,
-                                       },
-                                       'content': [
-                                           {
-                                               'component': 'VTextField',
-                                               'props': {
-                                                   'model': 'target_directory',
-                                                   'label': 'strm存放路径',
-                                                   'placeholder': '/home/alist/strm',
-                                               }
-                                           }
-                                       ]
-                                   },
-                                   {
-                                       'component': 'VCol',
-                                       'props': {
-                                           'cols': 12,
-                                       },
-                                       'content': [
-                                           {
-                                               'component': 'VTextField',
-                                               'props': {
-                                                   'model': 'ignored_directories',
-                                                   'label': '排除路径',
-                                                   'placeholder': '/img',
-                                               }
-                                           }
-                                       ]
-                                   }
-                               ]
-                           },
-                           {
-                               'component': 'VRow',
-                               'content': [
-                                   {
-                                       'component': 'VCol',
-                                       'props': {
-                                           'cols': 12,
-                                       },
-                                       'content': [
-                                           {
-                                               'component': 'VTextField',
-                                               'props': {
-                                                   'model': 'cron',
-                                                   'label': '定时任务cron表达式',
-                                                   'placeholder': '0 0 * * *',
-                                               }
-                                           }
-                                       ]
-                                   }
-                               ]
-                           },
-                           {
-                               'component': 'VRow',
-                               'content': [
-                                   {
-                                       'component': 'VCol',
-                                       'props': {
-                                           'cols': 12,
+                                           'md': 4
                                        },
                                        'content': [
                                            {
@@ -369,13 +259,14 @@ class alistapitostrm(_PluginBase):
                                        'component': 'VCol',
                                        'props': {
                                            'cols': 12,
+                                           'md': 4
                                        },
                                        'content': [
                                            {
                                                'component': 'VSwitch',
                                                'props': {
-                                                   'model': 'notify',
-                                                   'label': '开启通知',
+                                                   'model': 'onlyonce',
+                                                   'label': '立即运行一次',
                                                }
                                            }
                                        ]
@@ -384,13 +275,14 @@ class alistapitostrm(_PluginBase):
                                        'component': 'VCol',
                                        'props': {
                                            'cols': 12,
+                                           'md': 4
                                        },
                                        'content': [
                                            {
                                                'component': 'VSwitch',
                                                'props': {
-                                                   'model': 'onlyonce',
-                                                   'label': '立即运行一次',
+                                                   'model': 'notify',
+                                                   'label': '发送通知',
                                                }
                                            }
                                        ]
@@ -404,20 +296,108 @@ class alistapitostrm(_PluginBase):
                                        'component': 'VCol',
                                        'props': {
                                            'cols': 12,
+                                           'md': 6
                                        },
                                        'content': [
                                            {
-                                               'component': 'VAlert',
+                                               'component': 'VTextField',
                                                'props': {
-                                                   'type': 'info',
-                                                   'variant': 'tonal',
-                                                   'text': '备份文件路径默认为本地映射的config/plugins/AutoBackup。'
+                                                   'model': 'site_url',
+                                                   'label': 'alist地址',
+                                                   'placeholder': 'http://alist.b.com'
+                                               }
+                                           }
+                                       ]
+                                   },
+                                   {
+                                       'component': 'VCol',
+                                       'props': {
+                                           'cols': 12,
+                                           'md': 4
+                                       },
+                                       'content': [
+                                           {
+                                               'component': 'VTextField',
+                                               'props': {
+                                                   'model': 'root_path',
+                                                   'label': 'alist根路径',
+                                                   'placeholder': '/aliyun'
+                                               }
+                                           }
+                                       ]
+                                   },
+                                   {
+                                       'component': 'VCol',
+                                       'props': {
+                                           'cols': 12,
+                                           'md': 4
+                                       },
+                                       'content': [
+                                           {
+                                               'component': 'VTextField',
+                                               'props': {
+                                                   'model': 'cron',
+                                                   'label': '定时任务周期',
+                                                   'placeholder': '五位cron表达式'
+                                               }
+                                           }
+                                       ]
+                                   },
+                                   {
+                                       'component': 'VCol',
+                                       'props': {
+                                           'cols': 12,
+                                           'md': 6
+                                       },
+                                       'content': [
+                                           {
+                                               'component': 'VTextField',
+                                               'props': {
+                                                   'model': 'token',
+                                                   'label': 'alist的token',
+                                                   'placeholder': 'alist-******'
+                                               }
+                                           }
+                                       ]
+                                   },
+                                   {
+                                       'component': 'VCol',
+                                       'props': {
+                                           'cols': 12,
+                                           'md': 6
+                                       },
+                                       'content': [
+                                           {
+                                               'component': 'VTextField',
+                                               'props': {
+                                                   'model': 'target_directory',
+                                                   'label': 'strm存放路径',
+                                                   'placeholder': '/home/alist/strm'
+                                               }
+                                           }
+                                       ]
+                                   },
+                                   {
+                                       'component': 'VCol',
+                                       'props': {
+                                           'cols': 12,
+                                           'md': 6
+                                       },
+                                       'content': [
+                                           {
+                                               'component': 'VTextField',
+                                               'props': {
+                                                   'model': 'ignored_directories',
+                                                   'label': '排除路径',
+                                                   'placeholder': '/img'
                                                }
                                            }
                                        ]
                                    }
+
                                ]
-                           }
+                           },
+
                        ]
                    }
                ], {
