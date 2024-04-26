@@ -20,7 +20,7 @@ class alistapitostrm(_PluginBase):
     plugin_desc = "通过alist-api在指定目录下创建strm文件"
     plugin_icon = "https://img.679865.xyz/1/65ae8e98e6095.ico"
     plugin_color = "#3B5E8E"
-    plugin_version = "2.7"
+    plugin_version = "2.8"
     plugin_author = "tefuir"
     author_url = "https://github.com/tefuirZ"
     plugin_config_prefix = "alistapitostrmfile_"
@@ -405,8 +405,8 @@ class alistapitostrm(_PluginBase):
                    'site_url': self._site_url,
                    'token': self._token,
                    'target_directory': self._target_directory,
-                   'ignored_directories': ','.join(self._ignored_directories) if isinstance(
-                       self._ignored_directories, list) else '',
+                   "ignored_directories": ','.join(self._ignored_directories) if isinstance(self._ignored_directories,
+                                                                                            list) else '',
                    'cron': self._cron,
                    'enabled': self._enabled,
                    'notify': self._notify,
