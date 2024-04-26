@@ -20,7 +20,7 @@ class alistapitostrm(_PluginBase):
     plugin_desc = "通过alist-api在指定目录下创建strm文件"
     plugin_icon = "https://img.679865.xyz/1/65ae8e98e6095.ico"
     plugin_color = "#3B5E8E"
-    plugin_version = "2.8"
+    plugin_version = "2.9"
     plugin_author = "tefuir"
     author_url = "https://github.com/tefuirZ"
     plugin_config_prefix = "alistapitostrmfile_"
@@ -33,49 +33,21 @@ class alistapitostrm(_PluginBase):
     _target_directory = None
     _ignored_directories = None
     _token = None
-    # 任务执行间隔
-    _cron = None
-    _onlyonce = False
-    _notify = False
-    _scheduler: Optional[BackgroundScheduler] = None
 
     def init_plugin(self, config: dict = None):
         if config:
-            self._enabled = config.get("enabled")
-            self._root_path = config.get("root_path")
-            self._site_url = config.get("site_url")
-            self._target_directory = config.get("target_directory")
-            ignored_directories_str = config.get("ignored_directories")
+            self._enabled = config.get("enabled", False)
+            self._root_path = config.get("root_path", self._root_path)
+            self._site_url = config.get("site_url", self._site_url)
+            self._target_directory = config.get("target_directory", self._target_directory)
+            ignored_directories_str = config.get("ignored_directories", "")
             self._ignored_directories = [d.strip() for d in ignored_directories_str.split(',') if d.strip()]
-            self._token = config.get("token")
-            self._cron = config.get("cron")
-            self._notify = config.get("notify")
-            self._onlyonce = config.get("onlyonce")
+            self._token = config.get("token", "")
 
-
-        if self._onlyonce:
+        if self._enabled:
             logger.info("Strm File Creator 插件初始化完成")
             # 确保配置完全后，启动文件生成过程
-            self._scheduler.add_job(func=self.start_file_creation, trigger='date',
-                                    run_date=datetime.now(tz=pytz.timezone(settings.TZ)) + timedelta(seconds=3),
-                                    name="alist生成strm文件")
-            self._onlyonce = False
-            self.update_config({
-                "onlyonce": False,
-                "cron": self._cron,
-                "enabled": self._enabled,
-                "root_path": self._root_path,
-                "notify": self._notify,
-                "site_url": self._site_url,
-                "target_directory": self._target_directory,
-                "ignored_directories": self._ignored_directories,
-                "token": self._token,
-            })
-
-            # 启动任务
-            if self._scheduler.get_jobs():
-                self._scheduler.print_jobs()
-                self._scheduler.start()
+            self.start_file_creation()
 
     def start_file_creation(self):
         logger.info('脚本运行中，因避免alistapi阈值保护，时间会长点。。。。。。')
@@ -91,14 +63,7 @@ class alistapitostrm(_PluginBase):
         thread.start()
         thread.join()
         logger.info(f" 源目录下的所有视频文件的strm文件已经创建完成，脚本自动停用")
-
-        if self._notify:
-            self.post_message(
-                mtype=NotificationType.SiteMessage,
-                title="【alist生成strm文件】",
-                text=f"批量创建strm文件成功\n"
-                     f"清理备份数量 {del_cnt}\n"
-                     f"剩余备份数量 {bk_cnt - del_cnt}")
+        self._enabled = False
 
     def requests_retry_session(
             self,
@@ -185,48 +150,11 @@ class alistapitostrm(_PluginBase):
                 self.create_strm_files(item, target_directory, base_url, os.path.join(current_path, name))
 
     @staticmethod
-    @staticmethod
     def get_command() -> List[Dict[str, Any]]:
         pass
 
     def get_api(self) -> List[Dict[str, Any]]:
-        return [{
-            "path": "/alistapitostrmfile",
-            "endpoint": self.start_file_creation,
-            "methods": ["GET"],
-            "summary": "alist生成strm文件",
-            "description": "alist生成strm文件",
-        }]
-
-    def get_service(self) -> List[Dict[str, Any]]:
-        """
-        注册插件公共服务
-        [{
-            "id": "服务ID",
-            "name": "服务名称",
-            "trigger": "触发器：cron/interval/date/CronTrigger.from_crontab()",
-            "func": self.xxx,
-            "kwargs": {} # 定时器参数
-        }]
-        """
-        if self._enabled and self._cron:
-            return [{
-                "id": "alistapitostrmfile",
-                "name": "alist创建strm文件定时服务",
-                "trigger": CronTrigger.from_crontab(self._cron),
-                "func": self.start_file_creation,
-                "kwargs": {}
-            }]
-
-    def backup(self) -> schemas.Response:
-        """
-        API调用备份
-        """
-        success, msg = self.start_file_creation(),
-        return schemas.Response(
-            success=success,
-            message=msg
-        )
+        pass
 
     def get_form(self) -> Tuple[List[dict], Dict[str, Any]]:
         """
@@ -250,22 +178,6 @@ class alistapitostrm(_PluginBase):
                                                'component': 'VSwitch',
                                                'props': {
                                                    'model': 'enabled',
-                                                   'label': '启用插件',
-                                               }
-                                           }
-                                       ]
-                                   },
-                                   {
-                                       'component': 'VCol',
-                                       'props': {
-                                           'cols': 12,
-                                           'md': 4
-                                       },
-                                       'content': [
-                                           {
-                                               'component': 'VSwitch',
-                                               'props': {
-                                                   'model': 'onlyonce',
                                                    'label': '立即运行一次',
                                                }
                                            }
@@ -279,10 +191,10 @@ class alistapitostrm(_PluginBase):
                                        },
                                        'content': [
                                            {
-                                               'component': 'VSwitch',
+                                               'component': 'VTextField',
                                                'props': {
-                                                   'model': 'notify',
-                                                   'label': '发送通知',
+                                                   'model': 'root_path',
+                                                   'label': 'alist根路径',
                                                }
                                            }
                                        ]
@@ -305,40 +217,6 @@ class alistapitostrm(_PluginBase):
                                                    'model': 'site_url',
                                                    'label': 'alist地址',
                                                    'placeholder': 'http://alist.b.com'
-                                               }
-                                           }
-                                       ]
-                                   },
-                                   {
-                                       'component': 'VCol',
-                                       'props': {
-                                           'cols': 12,
-                                           'md': 4
-                                       },
-                                       'content': [
-                                           {
-                                               'component': 'VTextField',
-                                               'props': {
-                                                   'model': 'root_path',
-                                                   'label': 'alist根路径',
-                                                   'placeholder': '/aliyun'
-                                               }
-                                           }
-                                       ]
-                                   },
-                                   {
-                                       'component': 'VCol',
-                                       'props': {
-                                           'cols': 12,
-                                           'md': 4
-                                       },
-                                       'content': [
-                                           {
-                                               'component': 'VTextField',
-                                               'props': {
-                                                   'model': 'cron',
-                                                   'label': '定时任务周期',
-                                                   'placeholder': '五位cron表达式'
                                                }
                                            }
                                        ]
@@ -401,18 +279,14 @@ class alistapitostrm(_PluginBase):
                        ]
                    }
                ], {
-                   'root_path': self._root_path,
-                   'site_url': self._site_url,
-                   'token': self._token,
-                   'target_directory': self._target_directory,
+                   "enabled": self._enabled,
+                   "root_path": self._root_path,
+                   "site_url": self._site_url,
+                   "target_directory": self._target_directory,
                    "ignored_directories": ','.join(self._ignored_directories) if isinstance(self._ignored_directories,
                                                                                             list) else '',
-                   'cron': self._cron,
-                   'enabled': self._enabled,
-                   'notify': self._notify,
-                   'onlyonce': self._onlyonce,
-
-           }
+                   "token": self._token
+               }
 
     def get_page(self) -> List[dict]:
         pass
@@ -421,14 +295,4 @@ class alistapitostrm(_PluginBase):
         return self._enabled
 
     def stop_service(self):
-        """
-        退出插件
-        """
-        try:
-            if self._scheduler:
-                self._scheduler.remove_all_jobs()
-                if self._scheduler.running:
-                    self._scheduler.shutdown()
-                self._scheduler = None
-        except Exception as e:
-            logger.error("退出插件失败：%s" % str(e))
+        pass
